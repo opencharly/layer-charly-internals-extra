@@ -1,3 +1,8 @@
 # layer-charly-internals-extra
 
-Bootstrap commit. Content lands by PR.
+The `charly-internals-extra` candy of [opencharly/charly](https://github.com/opencharly/charly), as a standalone
+repo — the candy de-submodule cutover, kind-prefixed naming.
+
+It declares **8 `skill:` entities**, generated into
+[opencharly/marketplace](https://github.com/opencharly/marketplace) by that repo's workflow. Edit
+the `skill:` entities in `charly.yml`; never the generated `SKILL.md`.
