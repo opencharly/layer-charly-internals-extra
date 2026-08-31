@@ -23,19 +23,8 @@ strict-policy-skill:
         family: internals
         owner: charly-internals
         description: |-
-            Operationalization of CLAUDE.md R1-R5 plus the RDD and ADE pillars — the
-            engineering-discipline rules that come BEFORE runtime verification.
-            Covers: (R1) RCA on every failure via /charly-internals:root-cause-analyzer;
-            (RDD) prove every HIGH-RISK assumption on a disposable bed BEFORE editing;
-            (ADE) the spec-is-the-test `plan:` acceptance discipline; (R2) no
-            "pre-existing" / "out of scope" / "follow-up PR" classifications; (R3) no
-            code duplication, generic over ad-hoc; (R4) no ad-hoc workarounds; (R5)
-            hard cutover deletes the deprecated path AND every stale reference in the
-            same commit.
-            MUST be invoked when a failure / warning / anomaly surfaces, when a plan
-            rests on a high-risk unproven assumption, when a pattern is about to land
-            in a second surface, when a sleep / retry / magic-number is tempting, or
-            when a cutover commit is about to ship.
+            Operationalization of CLAUDE.md R1-R5 plus the RDD and ADE pillars — the engineering-discipline rules that come BEFORE runtime verification. Use when a failure/warning/anomaly surfaces, a plan rests on a high-risk unproven assumption, a pattern is about to land in a second surface, a sleep/retry/magic-number is tempting, or a cutover commit is about to ship.
+
         triggers:
             - "Agent Driven Evaluation (ADE) / `charly box feature run` / `charly check feature run` / `charly feature list/pending/validate` / authoring a candy's `plan:` + `description:` string / the agent grader for `agent-check:` steps"
             - "Engineering-discipline triggers (failure surfaced / dup pattern / ad-hoc fix tempting / \"out of scope\" framing)"
@@ -266,11 +255,8 @@ vm-spec-skill:
         family: internals
         owner: charly-internals
         description: |-
-            Go type reference for VmSpec and the discriminated-union source types
-            (VmSource cloud_image | bootc | clone | imported | bootstrap). Documents every
-            field, validation rules, and the adopt-user decision. Source files:
-            spec/spec/cue_types_gen.go (generated), spec/schema/vm.cue, sdk/vmshared/.
-            MUST be invoked before editing VmSpec Go code or authoring vm.yml entries.
+            Go type reference for VmSpec and the discriminated-union source types (cloud_image | bootc | clone | imported | bootstrap) — every field, validation rules, the adopt-user decision. Use before editing VmSpec Go code or authoring vm.yml entries.
+
         triggers:
             - "VmSpec / libvirt / cloud-init / OVMF internals"
         content: |
@@ -521,7 +507,8 @@ check-bed-runner-agent:
         type: agent
         model: inherit
         description: |-
-            Runs an existing disposable check bed (a `disposable: true` fleet) to completion via `charly check run <bed>` (the full R10 sequence) and returns the VERBATIM verdict — per-step status, overall exit code, and the tail of any failing step's log. Use as the R10 acceptance executor when a cutover must be proved on a disposable bed. Never summarizes away a failure.
+            Runs an existing disposable check bed to completion via `charly check run <bed>` (the full R10 sequence) and returns the VERBATIM verdict — per-step status, overall exit code, failing-step log tail. Use as the R10 acceptance executor; never summarizes away a failure.
+
         content: |
             You are the Check-Bed Runner subagent for OpenCharly. Your single job is to
             drive an existing `charly check` disposable test bed and report the result as
@@ -635,7 +622,8 @@ deploy-verifier-agent:
         type: agent
         model: inherit
         description: |-
-            Evaluates a deployment config (an charly box OR a user's own deploy) without destroying it — runs `charly check box`, `charly check live`, and `charly status`, then reports health and a verbatim pass/fail. Use to verify "does this deploy config actually work?" for either the charly repo's images or an end user's deployment. Read-mostly; never rebuilds or tears down.
+            Evaluates a deployment config (a charly box OR a user deploy) and verifies expected state matches reality, returning concrete evidence-backed findings. Read-mostly: probes image artifacts and running deployments; never mutates.
+
         content: |
             You are the Deploy-Verifier subagent for OpenCharly. You answer one
             question — **"does this deployment config actually work?"** — for both charly
@@ -722,7 +710,8 @@ layer-validator-agent:
         type: agent
         model: inherit
         description: |-
-            Blocking - Validates charly.yml structure before edits. Checks the high-value invariants (mandatory version + description + one check: step, the compact one-kind-key node form, one-verb-per-step, requires references, the unified service schema) and defers the full field set to /charly-image:layer + `charly box validate`.
+            Validates charly.yml structure and candy/layer claims against the schema and the checked-out repos, returning evidence-backed verdicts. Use before editing any charly.yml.
+
         content: |
             You are the Layer Validator subagent for OpenCharly development.
 
@@ -838,7 +827,8 @@ pr-validator-agent:
         type: agent
         model: inherit
         description: |-
-            Blocking - The FRESH PR evaluator. Independently validates a pull request against the active harness rulebook + relevant skills and certifies its verdict for the ORG-WIDE `charly/pr-validator` GitHub Actions gate (`Verdict: PASS|BLOCK` → green/red check run + a single PR comment). On PASS the org-wide workflow enables native auto-merge (squash), and tag-on-merge writes the CHANGELOG and CalVer-tags — NOT this agent. It is a different agent from the one that authored the PR; it trusts none of the author's claims.
+            Blocking — the FRESH PR evaluator. Independently validates a pull request against the active harness rulebook + relevant skills and certifies its verdict (PASS/BLOCK). Uses gh_pr_status for pull-request state. Spawned with a NEW context; re-derives everything from the PR itself.
+
         content: |
             You are the **PR Validator** — the fresh evaluator half of OpenCharly's two-step
             landing. The author agent opened a PR and did NOT merge it. You are spawned with
@@ -2132,7 +2122,8 @@ root-cause-analyzer-agent:
         type: agent
         model: inherit
         description: |-
-            MUST BE USED when any unexpected behavior, error, warning, or anomaly occurs. Performs deep root cause analysis following mandatory 8-step process. Never accepts "probably expected" without investigation.
+            Mandatory first response to any failure, error, warning, or anomaly (R1): 8-step root cause analysis with evidence.
+
         triggers:
             - "Unexpected failure / error / anomaly"
         content: |
@@ -2316,7 +2307,8 @@ testing-validator-agent:
         type: agent
         model: inherit
         description: |-
-            Blocking - Confirms that features have been locally tested before claiming they work. Verifies actual build, validation, and runtime results.
+            Confirms that features have been locally tested and verified (R10), inspecting the changed paths and the recorded evidence.
+
         content: |
             You are the Testing Validator subagent for OpenCharly development.
 
