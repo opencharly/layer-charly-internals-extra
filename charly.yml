@@ -351,8 +351,6 @@ vm-spec-skill:
             overlay on the parent snapshot's frozen external disk, bumps the parent
             snapshot's refcount, and regenerates the seed ISO with a fresh instance-id.
 
-            `Kind` is the discriminator. The `#VmSource` CUE disjunction (`schema/vm.cue`) enforces that exactly one branch's required fields are populated and forbids cross-branch fields (each arm pins `kind` and marks the others `_|_`).
-
             ### Adopt-user decision (BaseUser)
 
             `BaseUser` mirrors the container-side `base_user:` + `user_policy: adopt` pattern. When set:
