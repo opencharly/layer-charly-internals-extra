@@ -1079,7 +1079,8 @@ pr-validator-agent:
                 git -C "$artifact" fetch origin "$prhead" && git -C "$artifact" checkout "$prhead"
                 git -C "$artifact" rev-parse HEAD    # MUST equal the PR head — read it back
 
-                ./scripts/bootstrap-charly.sh
+                # R9 source build (worktree-local CalVer-stamped binary)
+                bash scripts/bootstrap-charly.sh
 
                 # 1. Delete the suspect and ask the generators to answer. `&&`, never `;` —
                 #    with `;` the guard captures only the LAST command's status.
@@ -2403,7 +2404,7 @@ testing-validator-agent:
             ```bash
             cd charly && go test ./...               # All tests pass
             cd charly && go vet ./...                # No issues
-            ./scripts/bootstrap-charly.sh             # Binary compiles
+            bash scripts/bootstrap-charly.sh          # R9 source build compiles
             bin/charly box validate                # CLI works
             ```
 
