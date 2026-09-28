@@ -1,5 +1,7 @@
+version: 2026.249.2125
 charly-internals-extra:
     candy:
+        version: 2026.218.1200
         description: |-
             Overflow skill entities for the charly-internals family (split from
             candy/charly-internals/charly.yml to stay under GitHub's 1 MiB
@@ -22,6 +24,7 @@ strict-policy-skill:
         owner: charly-internals
         description: |-
             Operationalization of CLAUDE.md R1-R5 plus the RDD and ADE pillars — the engineering-discipline rules that come BEFORE runtime verification. Use when a failure/warning/anomaly surfaces, a plan rests on a high-risk unproven assumption, a pattern is about to land in a second surface, a sleep/retry/magic-number is tempting, or a cutover commit is about to ship.
+
         triggers:
             - "Agent Driven Evaluation (ADE) / `charly box feature run` / `charly check feature run` / `charly feature list/pending/validate` / authoring a candy's `plan:` + `description:` string / the agent grader for `agent-check:` steps"
             - "Engineering-discipline triggers (failure surfaced / dup pattern / ad-hoc fix tempting / \"out of scope\" framing)"
@@ -261,6 +264,7 @@ vm-spec-skill:
         owner: charly-internals
         description: |-
             Go type reference for VmSpec and the discriminated-union source types (cloud_image | bootc | clone | imported | bootstrap) — every field, validation rules, the adopt-user decision. Use before editing VmSpec Go code or authoring vm.yml entries.
+
         triggers:
             - "VmSpec / libvirt / cloud-init / OVMF internals"
         content: |
@@ -527,6 +531,7 @@ check-bed-runner-agent:
         model: inherit
         description: |-
             Runs an existing disposable check bed to completion via `charly check run <bed>` (the full R10 sequence) and returns the VERBATIM verdict — per-step status, overall exit code, failing-step log tail. Use as the R10 acceptance executor; never summarizes away a failure.
+
         content: |
             You are the Check-Bed Runner subagent for OpenCharly. Your single job is to
             drive an existing `charly check` disposable test bed and report the result as
@@ -641,6 +646,7 @@ deploy-verifier-agent:
         model: inherit
         description: |-
             Evaluates a deployment config (a charly box OR a user deploy) and verifies expected state matches reality, returning concrete evidence-backed findings. Read-mostly: probes image artifacts and running deployments; never mutates.
+
         content: |
             You are the Deploy-Verifier subagent for OpenCharly. You answer one
             question — **"does this deployment config actually work?"** — for both charly
@@ -728,6 +734,7 @@ layer-validator-agent:
         model: inherit
         description: |-
             Validates charly.yml structure and candy/layer claims against the schema and the checked-out repos, returning evidence-backed verdicts. Use before editing any charly.yml.
+
         content: |
             You are the Layer Validator subagent for OpenCharly development.
 
@@ -844,6 +851,7 @@ pr-validator-agent:
         model: inherit
         description: |-
             Blocking — the FRESH PR evaluator. Independently validates a pull request against the active harness rulebook + relevant skills and certifies its verdict (PASS/BLOCK). Uses gh_pr_status for pull-request state. Spawned with a NEW context; re-derives everything from the PR itself.
+
         content: |
             You are the **PR Validator** — the fresh evaluator half of OpenCharly's two-step
             landing. The author agent opened a PR and did NOT merge it. You are spawned with
@@ -2155,6 +2163,7 @@ root-cause-analyzer-agent:
         model: inherit
         description: |-
             Mandatory first response to any failure, error, warning, or anomaly (R1): 8-step root cause analysis with evidence.
+
         triggers:
             - "Unexpected failure / error / anomaly"
         content: |
@@ -2339,6 +2348,7 @@ testing-validator-agent:
         model: inherit
         description: |-
             Confirms that features have been locally tested and verified (R10), inspecting the changed paths and the recorded evidence.
+
         content: |
             You are the Testing Validator subagent for OpenCharly development.
 
