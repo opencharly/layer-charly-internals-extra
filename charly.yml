@@ -1,7 +1,5 @@
-version: 2026.249.2125
 charly-internals-extra:
     candy:
-        version: 2026.218.1200
         description: |-
             Overflow skill entities for the charly-internals family (split from
             candy/charly-internals/charly.yml to stay under GitHub's 1 MiB
