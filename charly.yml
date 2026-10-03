@@ -760,10 +760,12 @@ layer-validator-agent:
               legal children beside the kind key are sub-ENTITY members, and ONLY under a
               deployable kind (pod/vm/kubernetes/local/android/group) — a candy nests NO members,
               so any second key under a candy entity is an error.
-            - **`version:` is MANDATORY** — a CalVer `YYYY.DDD.HHMM`. `charly box validate`
-              hard-errors when absent. Bump it when the layer's content changes (it is
-              the per-entity identity that drives cross-repo resolution and the
-              consuming image's `ai.opencharly.version` label).
+            - **No authored `version:`.** A per-entity `version:` was deleted by the
+              schema-versioning removal cutover and the candy schema is CLOSED, so a candy
+              carrying one fails closed-CUE at load (`charly migrate` strips it). The
+              per-entity identity the loader uses is the candy's **git tag**, which it assigns
+              to `CandyModel.Version` (`sdk/loaderkit/scan_orchestrate.go`; arbiter
+              `sdk/loaderkit/candy_version.go`), emitted as `ai.opencharly.candy_version`.
             - **`description:` and a `plan:` with ≥1 deterministic `check:` step are
               MANDATORY** (the ADE gate) — `charly box validate` hard-errors otherwise.
 
@@ -1504,7 +1506,7 @@ pr-validator-agent:
                   NOT regenerated in the SAME commit — FAILS.
                 - b. **No hand-edited generated files.** Every file carrying the
                   `Code generated … DO NOT EDIT` banner — `spec/spec/cue_types_gen.go`,
-                  `spec/spec/vocab_gen.go`, `spec/spec/version_gen.go`, every plugin's
+                  `spec/spec/vocab_gen.go`, every plugin's
                   `params/cue_types_gen.go`, `charly/plugins_generated.go`, the proto
                   `*.pb.go` — is REGENERATED, never hand-touched. If the diff changes a
                   generated file, a SOURCE change (`schema/*.cue`, `compiled_plugins:`,
@@ -2059,8 +2061,7 @@ pr-validator-agent:
                (e.g. `v0.2026192.0733`) is INVALID — it makes every consumer's `go.mod`
                unparseable in module mode — so this stripping is mandatory, not cosmetic.
                `plugins` and `docs` ARE tagged, with the same `v<YYYY.DDD.HHMM>` form as
-               every non-sdk repo (they carry no `charly.yml`, so no schema `version:` bump —
-               but the tag still marks the merge).
+               every non-sdk repo (they carry no `charly.yml`; the tag marks the merge).
             3. **Write the CHANGELOG from the PR body after the merge.** tag-on-merge creates
                `CHANGELOG/$VER.md` on `main` from the merged PR's title + body (the PR body IS
                the changelog; the author staged no CHANGELOG file), using a bot token (GitHub
@@ -2068,9 +2069,9 @@ pr-validator-agent:
                CHANGELOG path on protected `main`:
                - verify the landed entry's H1 byte-equals `# $VER — <title>` — a mismatch
                  means the entry carries an author's guess: rewrite it on `main`'s new head, add-only;
-               - if the PR bumped the schema, re-stamp `#SchemaVersion`
-                 (`spec/schema/version.cue`) + `version:` + the `candy/plugin-migrate/migrations.cue`
-                 entry to be strictly greater than the CURRENT `main` HEAD's schema version;
+               - if the PR changed the schema, confirm its `candy/plugin-migrate/migrations.cue`
+                 entry landed WITH it — there is no `#SchemaVersion` / `version:` to
+                 re-stamp (the table is version-free; `charly migrate` strips any leftover);
                - any other embedded release-version string.
             4. **The squash merge keeps `main` linear.** Native auto-merge's squash produces
                exactly ONE commit on `main` no matter how many fix commits the review rounds
