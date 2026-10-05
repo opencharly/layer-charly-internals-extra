@@ -270,7 +270,7 @@ vm-spec-skill:
         content: |
             # vm-spec
 
-            Go type reference for the VM surface. `VmSpec` + `VmSource` + `VmChecksum` + `VmNetwork` + `VmSsh` + `VmKeyInjection` + `VmCloudInit` + `VmCharlyInstall` are the canonical types that drive `charly vm build`, `charly vm create`, and `charly fleet add vm:<name>`. This skill is the authoritative Go reference — field semantics, defaults, validation rules, migration history. The YAML-authoring companion is `/charly-vm:vms-catalog`.
+            Go type reference for the VM surface. `VmSpec` + `VmSource` + `VmChecksum` + `VmNetwork` + `VmSsh` + `VmKeyInjection` + `VmCloudInit` + `VmCharlyInstall` are the canonical types that drive `charly vm build`, `charly vm create`, and `charly deploy add vm:<name>`. This skill is the authoritative Go reference — field semantics, defaults, validation rules, migration history. The YAML-authoring companion is `/charly-vm:vms-catalog`.
 
             ## Source files
 
@@ -556,7 +556,7 @@ check-bed-runner-agent:
             ```
 
             This executes the entire R10 sequence on the bed: `charly box build` (pod
-            beds) → `charly check box` → `charly fleet add` / `charly vm create` → `charly config` +
+            beds) → `charly check box` → `charly deploy add` / `charly vm create` → `charly config` +
             `charly start` (pod beds) → `charly check live` → fresh `charly update` (the R10
             fresh-rebuild acceptance gate) → teardown. The runner writes
             `.check/<bed>/<calver>/summary.yml` and per-step `.log` files.
@@ -578,7 +578,7 @@ check-bed-runner-agent:
             - **Disposable-only (the project rulebook R10 / "Disposable-Only Autonomy" (`AGENTS.md`)).** `charly check run <bed>` performs an
               unattended destroy + rebuild. The ONLY authorization is the bed's
               explicit `disposable: true` field. Every check bed carries it (a check bed is
-              just a `disposable: true` fleet); you run beds, never arbitrary deploys. Never run `charly update`/`charly check run`
+              just a `disposable: true` deploy); you run beds, never arbitrary deploys. Never run `charly update`/`charly check run`
               against a target that is not an explicit `disposable: true` bed.
             - **No scope-shrinking flags (the project rulebook R10 flag-override clause).** Run the bed AS
               SPECIFIED. NEVER add `--no-rebuild` (skips the R10 fresh-rebuild gate —
@@ -601,8 +601,8 @@ check-bed-runner-agent:
 
             ## Procedure
 
-            1. Confirm the bed is a `disposable: true` fleet (it resolves like any
-               fleet; `charly check run` will error cleanly if not). Note any host prereq the
+            1. Confirm the bed is a `disposable: true` deploy (it resolves like any
+               deploy; `charly check run` will error cleanly if not). Note any host prereq the
                bed needs (libvirt user session for VM beds, `/dev/kvm` for the android
                bed) and report a missing prereq as a blocker, not a pass.
             2. Run `charly check run <bed>`; capture stdout/stderr and `$?`.
@@ -659,7 +659,7 @@ deploy-verifier-agent:
               <bed>` → build/deploy/fresh-update/teardown) on a `disposable: true` bed.
             - **You** are **read-mostly**: you probe an image artifact and/or an
               already-running deployment and report. You NEVER `charly update`, `charly start`,
-              `charly remove`, `charly fleet add`, or rebuild anything. If verification needs a
+              `charly remove`, `charly deploy add`, or rebuild anything. If verification needs a
               destroy+rebuild, say so and hand back to `check-bed-runner` — do not do it
               yourself.
 
