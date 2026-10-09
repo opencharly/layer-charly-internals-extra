@@ -262,7 +262,7 @@ strict-policy-skill:
             - `/charly-internals:root-cause-analyzer` agent — the R1 mandatory-invocation target. The agent's 8-step process is the only authorized first response to a failure.
             - `/charly-internals:disposable` — R10's verification target. Strict-policy R5 (cutover) cooperates with R10 (verification) to ensure the post-rename state is both clean and live.
             - `/charly-internals:skills` — the meta-skill for skill maintenance. R5's stale-reference sweep includes skill paragraphs; the skills meta-skill has a "When to Update Skills" row dedicated to R5 self-test failures.
-            - The "Ground Truth Rules" in each harness root rulebook define R1–R10. Strict-policy operationalizes R1–R5 specifically.
+            - The project rulebook's "The ground-truth rules R1–R10" section (umbrella `AGENTS.md`) defines R1–R10. Strict-policy operationalizes R1–R5 specifically.
             - the project rulebook "Prioritize Clean Architecture Above All Else" — the architectural-philosophy framing of R2 + R3. Both framings (procedural rules R2+R3 AND architectural-philosophy section) are binding.
             - the project rulebook "AI Attribution" and "Commit, push, land" — the no-push-on-violation clause that gives R1–R5 their teeth. Any violation FORBIDS the push. No tier downgrade. No "ship at lower tier". Fix or escalate.
 
@@ -1457,6 +1457,13 @@ pr-validator-agent:
                `charly` CLI is the ONLY operational interface). A race "fixed" with a delay
                instead of a sync primitive FAILS. (Distinguish the legitimate
                `exec.Command("podman"/…)` where charly IS the orchestrator — that is allowed.)
+            8a. **R4 — fix the product first; documentation never routes around a defect.** When
+               the diff touches both docs and code (or the body describes a doc fix for a code
+               defect), the BEHAVIOUR is corrected before the prose: editing docs to match a bug, or
+               to avoid one, FAILS. Every command a reader is told to run works with nothing but the
+               `charly` binary installed. A command needing a checkout, `./bin/charly`, `task`, or a
+               repo-relative path outside an INSTALL section is a PRODUCT defect, and the fix belongs
+               in `charly` (`/charly-build:docs`).
             9. **R5 — hard cutover + grep self-test.** Every removed/renamed identifier AND
                every false/outdated claim is swept in the SAME commit: `git grep '<id>'`
                (inside a submodule with `git -C <sub> grep` — grep does not cross a gitlink)
@@ -1485,6 +1492,10 @@ pr-validator-agent:
                 binary was REBUILT and `charly version` matches source, and every new runtime
                 OS dep is in the charly candy's `packaging:` section (never a manual host
                 install).
+            10a. **R8 — live or skip, never fake a live service.** A test, harness, or gate that
+                crosses a real service boundary (GitHub, an LLM/provider endpoint, the network) runs
+                against the REAL service, or SKIPS visibly when its credential is absent. A mock,
+                stub, or fake of that boundary in the diff FAILS.
             11. **R10 — disposable-only, fresh-rebuild, coverage.** Runtime proof is on a
                 `disposable: true` target only, on a FRESH `charly update`/rebuild, at ZERO
                 warnings, with pasted output for EACH changed piece. The change ships the
@@ -2146,8 +2157,10 @@ pr-validator-agent:
               [PASS/FAIL] 6. R1 fix it or file it (`## Filed issues` real + non-blocking; on-PR findings never filed away)
               [PASS/FAIL] 7. R2 no duplication (one shared abstraction)
               [PASS/FAIL] 8. R3 no ad-hoc workaround (sync primitive, not sleep/retry/magic-number/ad-hoc-podman)
+              [PASS/FAIL] 8a. R4 fix the product first (behaviour before prose; every documented command works with only `charly`)
               [PASS/FAIL] 9. R5 hard cutover + grep self-test; no transitional/dual-mode in final code
               [PASS/FAIL] 10. R6/R7/R9 git safety + artifact + binary integrity (git-safety / Containerfile+labels / rebuilt-binary+deps)
+              [PASS/FAIL] 10a. R8 live or skip (no mock/stub/fake of a real service boundary)
               [PASS/FAIL] 11. R10 disposable-only, fresh-rebuild, zero-warning, check-coverage-that-would-fail-without-it
               [PASS/FAIL] 12. RDD / ADE (description+plan+≥1 check per candy) / SDD CUE-mandate @100%
                              (cue:gen no-op + reproducible; no hand-edited *_gen.go; wire types CUE-sourced;
