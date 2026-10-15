@@ -291,6 +291,31 @@ strict-policy-skill:
 
             Per the project rulebook "AI Attribution" section: a violation at any layer FORBIDS the push. The five-tier table describes the proof level a pushed commit has earned. A known violation means nothing is pushed, regardless of tier. The agent fixes the violation or escalates to the operator — never both downgrade and ship.
 
+            ## The INSTRUMENT CHECKLIST — apply BEFORE any count or absence claim (Lead ruling, 2026-10-14)
+            Three defects of one family in a single wave — a bed trigger that was never the trigger, an unanchored
+            call-site count that manufactured a stale-count finding, and an absence claim made with a piped `head` —
+            are **not** fixed by resolving to be more careful. **The durable control is mechanical, and it applies to
+            every grep a claim rests on:**
+            | # | The claim | The instrument | Why |
+            |---|---|---|---|
+            | 1 | **A count of CALL SITES** | anchored: `grep -cE '^[[:space:]]+name\('` | a PROSE mention of a symbol is not a call |
+            | 2 | **An ABSENCE claim** | `grep -rl --include=… .` with **NO `head`, NO `-v`**, and the **SCOPE STATED** | a window is not an inventory; `per_page` and `head` are windows |
+            | 3 | **A prose IDENTIFIER** | **case-insensitive (`-i`)** | prose capitalizes — a capitalised identifier costs a whole round |
+            | 4 | **Any claim-bearing grep** | **never pipe into `head`**; a `Broken pipe` in the output is a **defect in the run**, not a clean result | the pager's exit code is not the command's |
+            | 5 | **An assertion about behaviour** | a **mutation** that breaks the behaviour must FAIL it | a test that cannot fail proves nothing |
+            | 6 | **An assertion about a RULE** | mutate the rule's **FORM** (allowlist it to one case), not only its behaviour | the rule's reach is the claim |
+            | 7 | **A claim about generality** | assert every **AXIS** separately — for a path: content, structure, and NAME | one axis passing is not the claim |
+            | 8 | **A claim about a DIFF's scope** ("this PR contains my change") | `git log --oneline origin/main..HEAD` before the claim | the branch may carry less than you think |
+            | 9 | **A mutation RESULT** ("this mutation was killed") | the harness must **prove the mutation APPLIED** | an unapplied mutation "dies" for free |
+            | 10 | **A result carried across a tree change** ("the other tree is identical, so my run still holds") | **re-run on the new tree** | identical is an assertion, not a measurement |
+            | 13 | **A result's REVISION** | **name the revision a result was measured on** | a figure without its revision is a claim about an unknown tree |
+            **A field that is null for "unknown" and null for "no" cannot be counted with** — *the pull-list `merged`
+            boolean is `null` for PRs that HAVE merged, so filter on `merged_at`, never on `merged`.*
+            **⚑ THE ROOT OF ALL OF THEM, IN ONE SENTENCE (Lead, 2026-10-14):**
+            > **A result reported without verifying that the instrument ran is not a result — in either direction.**
+            This is the complement of *"A GREEN verdict is not a LANDING"* above: that section is about a RESULT reported
+            without the mechanism having run; this one is about the INSTRUMENT behind any result at all. **Items 11 and 12
+            of the original ruling were never recorded in the wave's ledger and are deliberately not invented here.**
             ## Cross-references
 
             - `/charly-internals:cutover-policy` — the operationalization of R5 for schema/API/rename changes specifically. Cutover-policy is one of strict-policy's children — R5 governs all hard-cutover behavior, and cutover-policy operationalizes it for the most common case.
