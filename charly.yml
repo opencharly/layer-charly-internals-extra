@@ -244,6 +244,41 @@ strict-policy-skill:
 
             **Interaction with other rules.** R5 covers stale references everywhere, not just the deleted artifact itself. R5 is the cleanup discipline that R2 enables — once you've refactored to the unified abstraction, R5 ensures every old reference points to the new one.
 
+            ## A GREEN verdict is not a LANDING — the four mechanisms, and the re-trigger table
+
+            *This is R10's boundary, and it is where a correct change still fails to ship.*
+
+            **A passing review verdict is one step's output. Four different mechanisms can stop it becoming a merge, and a body that
+            claims a landing must name which it ruled out.**
+
+            1. **The repo setting arms nothing.** *Auto-merge is a repo setting; a PASS that "arms" it on a repo where it is not
+               enabled merges nothing.*
+            2. **The repo's own required check refuses.** *A ruleset-required status check (`validate / validate`) that is red or was
+               never reported blocks the merge outright — whatever the verdict says, and even if every sibling is green.*
+            3. **The branch is `BEHIND`.** *The head no longer contains the merge base.*
+            4. **Any sibling check is red, so the validator's own head-check step fails and "Enable auto-merge" is skipped.** *The
+               verdict comment may still say PASS; the RUN is what decides.*
+
+            **Read the CHECK RUN, not the verdict comment.** *The verdict comment is emitted before the workflow finishes, so
+            `PASS` in a comment and a red check-run are perfectly normal together.* **And look at the SIBLINGS: a red sibling makes the
+            validator's own check red for a reason that has nothing to do with your diff.**
+
+            **THE RE-TRIGGER TABLE — one action per condition, and no others:**
+
+            | condition | the ONE action |
+            |---|---|
+            | branch is `BEHIND` | `gh pr update-branch` — **never a rebase, never a force-push** |
+            | an unresolvable / stale `workflow_id`, or a run that produced **no verdict** | a NEW run: **an empty round commit** |
+            | `update-branch` on an already-current branch | **nothing — it is a no-op and re-fires nothing** |
+            | a body-only change | a push still needs a commit to re-fire the gate (a body edit never does) |
+
+            **And never interrupt or clean an active long-running bed because it is quiet — wait for its exit and its
+            `summary.yml`.** *A VM bed can legitimately run for a long time; killing it loses the evidence you were waiting for.*
+
+            **A note on the attribution tier, filed as `charly/946`:** *no row in the AI-attribution tier table fits "the class's gate
+            passed, but the change's own central runtime action is not live-proven" — which is the normal shape of a producer-first
+            library whose consumer supplies the venue.* **Until a row exists, say which clause of the closest tier diverges and why,
+            rather than inflating the tier or forbidding the push in the other clause.**
             ## How R1–R5 interact with R6–R10
 
             R1–R5 are **authoring discipline** — what you do during the work.
