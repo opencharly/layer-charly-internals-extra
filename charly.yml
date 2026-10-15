@@ -244,7 +244,7 @@ strict-policy-skill:
 
             **Interaction with other rules.** R5 covers stale references everywhere, not just the deleted artifact itself. R5 is the cleanup discipline that R2 enables — once you've refactored to the unified abstraction, R5 ensures every old reference points to the new one.
 
-            ## A GREEN verdict is not a LANDING — the four mechanisms, and the re-trigger table
+            ## A GREEN verdict is not a LANDING — the mechanisms, and the re-trigger table
 
             *This is R10's boundary, and it is where a correct change still fails to ship.*
 
@@ -258,6 +258,8 @@ strict-policy-skill:
             3. **The branch is `BEHIND`.** *The head no longer contains the merge base.*
             4. **Any sibling check is red, so the validator's own head-check step fails and "Enable auto-merge" is skipped.** *The
                verdict comment may still say PASS; the RUN is what decides.*
+            5. **The arming step runs and reports SUCCESS, and arms nothing.** *The inverse of 4: the head-check step passes, the arming step executes and returns success, and the PR still reads no auto-merge — so the check list shows a green required check either way, and only the PR state reveals it.* Measured on `opencharly/lobster#4`: the repo allows auto-merge, one `validate / validate` sits on the head and it is green, `mergeable` is `CLEAN`, the arming step reported success — and the PR was unmerged with nothing armed. *Leading cause, untested: that step was reached by a REST RE-RUN, and a re-run may not carry the context its mutation needs.*
+            **The one action for it is a NEW HEAD — an empty round commit; a re-run does not arm it (measured).** *A re-run is the right tool for ONE job — clearing a stale non-passing run from the merge gate — and the wrong tool for another: it does not re-arm auto-merge.*
 
             **Read the CHECK RUN, not the verdict comment.** *The verdict comment is emitted before the workflow finishes, so
             `PASS` in a comment and a red check-run are perfectly normal together.* **And look at the SIBLINGS: a red sibling makes the
