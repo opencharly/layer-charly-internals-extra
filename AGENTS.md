@@ -40,10 +40,10 @@ Canonical files:
 - `charly box validate` at the repo root — the structural check: the manifest
   must parse and validate. The routing-only `skill:` shape these entities use is
   younger than some binaries: a charly built from an older source rejects it with
-  `#SkillInput.description: incomplete value !=""`. Run it with a worktree-local
-  build (`./scripts/bootstrap-charly.sh`, then `CHARLY_PLUGIN_ONLY=1` so a
-  worktree build does not scan the packaged plugins from `/usr/lib/charly/plugins`),
-  never with the shared host install.
+  `#SkillInput.description: incomplete value !=""`. Validate with a `charly` whose
+  source is at or past that shape and never with the shared host install — confirm
+  it with `charly version`, and pass `CHARLY_PLUGIN_ONLY=1` so a worktree build does
+  not scan the packaged plugins under `/usr/lib/charly/plugins`.
 - The merge gate is the **org-wide** `charly/pr-validator` (required check
   `validate / validate`, defined in `opencharly/.github`); this repo has no
   per-repo candy gate.
