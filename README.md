@@ -8,15 +8,17 @@ content and owns the overflow entities of the `internals` family — split out o
 `owner:` field of every entity stays `charly-internals`, so the runtime
 association is unchanged. It currently carries eight entities:
 
-- Two `skill:` entities: `strict-policy` (the R1–R5 + RDD/ADE operationalization)
-  and `vm-spec` (the `VmSpec` Go type reference).
-- Six `skill:`-kind agent entities (`type: agent`): `check-bed-runner`,
-  `deploy-verifier`, `layer-validator`, `pr-validator`, `root-cause-analyzer`,
-  and `testing-validator` — projected as the `internals/agents/` roster.
+- Two skills: `strict-policy` (the R1–R5 + RDD/ADE operationalization) and
+  `vm-spec` (the `VmSpec` Go type reference).
+- Six agent definitions (`type: agent`): `check-bed-runner`, `deploy-verifier`,
+  `layer-validator`, `pr-validator`, `root-cause-analyzer`, and
+  `testing-validator` — projected as the `internals/agents/` roster.
 
-`candy/plugin-marketplace` regenerates the standalone
+Each entity's prose is authored with the entity itself, under this repo's own
+`.agents/` trees; `charly.yml` carries only the routing metadata its consumers
+read. `candy/plugin-marketplace` regenerates the standalone
 [opencharly/marketplace](https://github.com/opencharly/marketplace) corpus from
-these entities, so the skills and agents are authored here and projected there.
+the two together, so the skills and agents are authored here and projected there.
 
 ## What it provides
 
@@ -24,19 +26,21 @@ these entities, so the skills and agents are authored here and projected there.
 |---|---|
 | Layer / candy | `charly-internals-extra` (concept candy) |
 | Install content | none — a `true` no-op `plan:` |
-| Owns | 8 entities: 2 `skill:` + 6 agent (`type: agent`) |
+| Owns | the `internals` overflow: 2 skills + 6 agent definitions |
 | Projected to | `marketplace/internals/skills/` and `marketplace/internals/agents/` |
 | Service / port | none |
 
 ## How to use it
 
 This repo is consumed as a **skill and agent source**, not as an image layer.
-Edit the entities in `charly.yml`; the marketplace regeneration projects the two
-skills into `/charly-internals:*` pages and the six agents into the internals
-roster. To reference the repo directly, compose it in a box. A box is a `candy:`
-node that carries the box's `base:` image and a nested `candy:` list of layer
-refs (the nested `candy:` is the composition list; the outer `candy:` is the box
-body):
+Edit a skill's or an agent's prose with the entity itself; `charly.yml` holds
+only the routing metadata, the harness resolves a skill by name, and the agent
+definitions load from the projected roster. The marketplace regeneration projects
+the two skills into `/charly-internals:*` pages and the six agents into the
+internals roster. To reference the repo directly, compose it in a box. A box is a
+`candy:` node that carries the box's `base:` image and a nested `candy:` list of
+layer refs (the nested `candy:` is the composition list; the outer `candy:` is the
+box body):
 
 ```yaml
 my-box:
@@ -48,9 +52,10 @@ my-box:
 
 ## Layout
 
-- `charly.yml` — the `charly-internals-extra:` concept candy entity plus eight
-  entities: `strict-policy-skill`, `vm-spec-skill`, and the six
-  `*-agent` entities.
+- `charly.yml` — the `charly-internals-extra:` concept candy entity plus the
+  routing metadata for its eight entities.
+- `.agents/` — the authored prose those entities route to: each skill's
+  `SKILL.md` and each agent definition's markdown file.
 - `.github/workflows/tag-on-merge.yml` — CalVer tag + `CHANGELOG/` on merge.
 - `README.md` — this user overview.
 
