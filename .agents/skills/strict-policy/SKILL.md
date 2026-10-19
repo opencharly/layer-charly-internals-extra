@@ -4,20 +4,6 @@ description: |-
   Operationalization of AGENTS.md R1-R5 plus the RDD and ADE pillars — the engineering-discipline rules that come BEFORE runtime verification. Use when a failure/warning/anomaly surfaces, a plan rests on a high-risk unproven assumption, a pattern is about to land in a second surface, a sleep/retry/magic-number is tempting, or a cutover commit is about to ship.
 ---
 
-**Sweep for the claim, not the phrase.** R5 is about outdated claims, and a string is not a
-claim: a sweep keyed to retired wording returns `rc=1` while a different sentence asserting the
-same proposition survives three lines away. Proof that a sweep is a control is that it **matches
-the claim where the claim exists** — not that it matches nothing.
-
-
-**An absence claim must name the positive its predicate catches.** An empty result from an
-uncalibrated predicate is not evidence; from a calibrated one it is. Paste both halves: the
-predicate matching a known positive, and the predicate matching nothing in the tree under test.
-Measured: a sweep reported "no quantified claims here" while a too-narrow pattern missed
-`23 Omarchy-built packages` — one word between the digits and the noun — and the claim was in
-the file all along.
-
-
 # strict-policy — operationalizing R1–R5
 
 ## Overview
