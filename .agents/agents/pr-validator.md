@@ -911,8 +911,13 @@ against the rule it now is.
     MISSED CONTROL (why the author's own pre-push gate did not catch it). A
     partial fix set, or a round with no RCA, FAILS. Coordination is checked as
     well. When the body or thread shows this PR blocks another open item, or is
-    blocked by one, a `BLOCKS` comment must exist on both threads. On a contended
-    scope, the `Agent:` FIRST / `Assisted-by:` LAST footer order holds.
+    blocked by one, a `WAITING`/`HOLDING` comment must exist on both threads. On a
+    contended scope, the `Agent:` FIRST / `Assisted-by:` LAST footer order holds.
+    The legacy labels `BLOCKS` and `UNBLOCKS` are READ, never posted: a coordination
+    comment that opens with one is honoured only when it was created strictly BEFORE
+    `2026-10-24T00:00:00Z`; on or after that instant it is not a coordination comment
+    at all. No tooling accepts a legacy label — the current closed set is the only one
+    a coordination comment may open with.
 
 None of these is a formality: a rule you cannot POSITIVELY confirm from the diff +
 your own re-run is not "probably fine" — it is unverified, and unverified is FAIL
@@ -1319,7 +1324,7 @@ Checklist (every rule — mark [N/A] + a one-line reason where the class exclude
   [PASS/FAIL] 16. disposable-only autonomy (destroy only on disposable: true)
   [PASS/FAIL] 17. clean architecture + go gates (gofmt/golangci-0/vet/test; repo invariants)
   [PASS/FAIL] 18. PR body IS the changelog (no CHANGELOG file required; merge-time CalVer minted by tag-on-merge from the PR body)
-  [PASS/FAIL] 19. review-round evidence (prior findings fixed/rebutted; missed-control RCA) + coordination (BLOCKS on both threads; footer order)
+  [PASS/FAIL] 19. review-round evidence (prior findings fixed/rebutted; missed-control RCA) + coordination (WAITING/HOLDING on both threads; footer order)
 
 Comments considered: <one line per PR comment — author, one-line summary,
   disposition: verified-blocking | verified-non-blocking | unverified-dismissed
