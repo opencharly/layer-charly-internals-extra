@@ -911,13 +911,11 @@ against the rule it now is.
     MISSED CONTROL (why the author's own pre-push gate did not catch it). A
     partial fix set, or a round with no RCA, FAILS. Coordination is checked as
     well. When the body or thread shows this PR blocks another open item, or is
-    blocked by one, a `WAITING`/`HOLDING` comment must exist on both threads. On a
-    contended scope, the `Agent:` FIRST / `Assisted-by:` LAST footer order holds.
-    The legacy labels `BLOCKS` and `UNBLOCKS` are READ, never posted: a coordination
-    comment that opens with one is honoured only when it was created strictly BEFORE
-    `2026-10-24T00:00:00Z`; on or after that instant it is not a coordination comment
-    at all. No tooling accepts a legacy label — the current closed set is the only one
-    a coordination comment may open with.
+    blocked by one, a `WAITING`/`HOLDING` comment must exist on both threads. A
+    coordination comment opens with one of the nine closed-set labels and nothing
+    else; a comment opening with any other word is not a coordination comment and
+    does not satisfy this check. On a contended scope, the `Agent:` FIRST /
+    `Assisted-by:` LAST footer order holds.
 
 None of these is a formality: a rule you cannot POSITIVELY confirm from the diff +
 your own re-run is not "probably fine" — it is unverified, and unverified is FAIL
