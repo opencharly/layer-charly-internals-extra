@@ -1,66 +1,58 @@
 # AGENTS.md — layer-charly-internals-extra
 
-Standalone candy repo for the `charly-internals-extra` concept candy — it ships
-no install content and owns the overflow entities of the `internals` family,
-split out of `layer-charly-internals` to stay under GitHub's 1 MiB
-contents-API cap. The `owner:` field stays `charly-internals`. Each entity's
-prose is authored with the entity itself, under this repo's own `.agents/` trees;
-`charly.yml` at the repo root keeps only the routing metadata its consumers read,
-and `candy/plugin-marketplace` regenerates the standalone opencharly/marketplace
-corpus from the two together.
+**This repo is RETIRED.** It authors no skill and no agent definition any more: all eight
+bodies it carried have moved beside the code, plugin, contract or rulebook each of them
+documents (opencharly/opencharly#600, #611), and every one is byte-identical at its
+destination. It is archived once its drain has merged and been tagged.
 
 Canonical files:
 
-- `charly.yml` — the `charly-internals-extra:` concept candy entity plus the
-  routing metadata for its eight entities: the two skills `strict-policy` and
-  `vm-spec`, and the six agent definitions `check-bed-runner`,
-  `deploy-verifier`, `layer-validator`, `pr-validator`, `root-cause-analyzer`,
-  `testing-validator`.
-- `.agents/` — the authored prose those entities route to: each skill's
-  `SKILL.md` and each agent definition's markdown file. The marketplace corpus
-  holds the projection of these; edit that copy never.
+- `charly.yml` — the `charly-internals-extra:` candy node and nothing else. It is a real
+  `candy:` because a project needs one; its `plan:` is a `true` no-op `run:` step plus a
+  `true` no-op `check:` step, and **neither is an assertion** — there is no body left here
+  for the body-existence gate to resolve.
 - `.github/workflows/tag-on-merge.yml` — CalVer tag + `CHANGELOG/` on merge.
+- `CHANGELOG/` — per-CalVer history.
 - `README.md` — user overview only; never agent guidance.
 
-## Load these skills first (R0)
+## Where the prose went (the destination map)
 
-- `/charly-internals:strict-policy` — the R1–R5 + RDD/ADE operationalization.
-  Load before editing the `strict-policy` skill's prose.
-- `/charly-internals:vm-spec` — the `VmSpec` Go type reference. Load before
-  editing the `vm-spec` skill's prose.
-- `/charly-internals:agents` — the agent/roster contract (how agent definitions
-  are authored and projected, the enforcer/executor split). Load before editing
-  any agent definition.
-- `/charly-image:layer` — the candy authoring reference (`charly.yml` schema,
-  `plan:` step verbs incl. `check:`, package sections, service declarations).
-  Load before editing any entity field or plan step.
+Measured as git blobs: this repo's pre-drain `main` versus each destination's `origin/main`.
+Every row compares equal — the move relocated the AUTHORITY over a body, it did not rewrite
+one.
 
-## Build / validate / test
+| entity | destination | path there | blob (carrier / destination) |
+|---|---|---|---|
+| `strict-policy` | `opencharly/opencharly` @ `v2026.300.1151` | `.agents/skills/strict-policy/SKILL.md` | `f9b386e0eb22` == `f9b386e0eb22` |
+| `vm-spec` | `opencharly/spec` @ `origin/main` | `.agents/skills/vm-spec/SKILL.md` | `58bace23d6ec` == `58bace23d6ec` |
+| `check-bed-runner` | `opencharly/opencharly` @ `v2026.300.1151` | `.agents/agents/check-bed-runner.md` | `dde2044b47dd` == `dde2044b47dd` |
+| `deploy-verifier` | `opencharly/opencharly` @ `v2026.300.1151` | `.agents/agents/deploy-verifier.md` | `31b3a4ed3c86` == `31b3a4ed3c86` |
+| `layer-validator` | `opencharly/opencharly` @ `v2026.300.1151` | `.agents/agents/layer-validator.md` | `367c500d299b` == `367c500d299b` |
+| `pr-validator` | `opencharly/opencharly` @ `v2026.300.1151` | `.agents/agents/pr-validator.md` | `82ec3502decc` == `82ec3502decc` |
+| `root-cause-analyzer` | `opencharly/opencharly` @ `v2026.300.1151` | `.agents/agents/root-cause-analyzer.md` | `a31f05843acc` == `a31f05843acc` |
+| `testing-validator` | `opencharly/opencharly` @ `v2026.300.1151` | `.agents/agents/testing-validator.md` | `968a7eb89430` == `968a7eb89430` |
 
-- `charly box validate` at the repo root — the structural check: the manifest
-  must parse and validate. The routing-only `skill:` shape these entities use is
-  younger than some binaries: a charly built from an older source rejects it with
-  `#SkillInput.description: incomplete value !=""`. Validate with a `charly` whose
-  source is at or past that shape and never with the shared host install — confirm
-  it with `charly version`, and pass `CHARLY_PLUGIN_ONLY=1` so a worktree build does
-  not scan the packaged plugins under `/usr/lib/charly/plugins`.
-- The merge gate is the **org-wide** `charly/pr-validator` (required check
-  `validate / validate`, defined in `opencharly/.github`); this repo has no
-  per-repo candy gate.
-- The candy is documentation-only: its `plan:` is a `true` no-op plus a `true`
-  `check:` that the overflow skill/agent entities are present and generated into
-  the marketplace. There is no live bed.
+`strict-policy` is the **general-guidance** class: it operationalizes `AGENTS.md` R1–R5 plus
+RDD and ADE, names no code, plugin or config, and its own text defers its forbidden-excuse
+catalog to `/charly-internals:cutover-policy` and its placement law to
+`/charly-internals:plugin` — both already umbrella skills. The umbrella is therefore its home
+on Part II #5's FIRST clause, and the `#611` exception (a home repo that cannot AUTHOR skills)
+is not what places it: that exception covers `git-workflow` and `repo-setup`, whose config
+home is `opencharly/.github`. `opencharly/opencharly#627` concluded exactly this and landed
+the body; this drain is the REMOVE half of that pair.
 
-## Modify this repo
+The six agent definitions describe a ROLE in the org's development workflow — an evaluator, a
+bed executor, the R1 analyzer, the R10 tester — and no code implements one; the umbrella's
+`agents` skill is the roster that DESCRIBES them, so the roster and its members now live and
+are tagged together.
 
-- A skill's or an agent's prose is the projected usage source. Edit it with the
-  entity, never the generated file in the marketplace corpus; a corpus
-  regeneration (`charly marketplace generate`) projects the prose and the
-  routing metadata together.
-- When a rule's operationalization or an agent's contract changes, update the
-  matching prose in the same change so the corpus does not drift.
-- Keep the concept candy's `plan:` no-op; it exists only to carry the routing
-  metadata.
+## What still lives here
+
+Only the candy node, the tag workflow and history. Nothing in this repo is a source of
+guidance any more. The dangling `owner: charly-internals` this repo carried on all eight nodes
+— opencharly/layer-charly-internals-extra#30 — is gone with the nodes: the issue gives two
+legal fixes and forbids applying both, and the drain is the one that removed them rather than
+rewriting a field.
 
 ## Landing
 

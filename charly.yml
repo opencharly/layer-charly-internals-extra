@@ -1,79 +1,30 @@
 charly-internals-extra:
     candy:
         description: |-
-            Overflow skill and agent entities for the charly-internals family (split from
-            candy/charly-internals/charly.yml to stay under GitHub's 1 MiB
-            contents-API cap). Each entity's prose is authored with the entity itself;
-            the node in this file carries only the routing metadata its consumers read.
-            The owner field stays "charly-internals" so the runtime association is
-            unchanged.
+            RETIRED concept candy. It owns no `skill:` and no `agent` entity any more: the two
+            skills and the six agent definitions it carried have moved beside the code,
+            plugin, contract or rulebook each of them documents (opencharly/opencharly#600,
+            #611), and every body is byte-identical at its destination. This repo authors no
+            prose.
+
+            It stays a real `candy:` node because a project needs one, and it carries a `true`
+            no-op `run:` step and a `true` no-op `check:` step. NEITHER is an assertion: there
+            is no body left here for the body-existence gate to resolve, so a step that read
+            `true` would assert nothing about anything.
+
+            The `owner:` field of the entities this repo once carried is GONE with them, which
+            is the whole of opencharly/layer-charly-internals-extra#30: all eight nodes named
+            `charly-internals`, the candy of a DIFFERENT repo, so the owner rule rejected every
+            node before any body was considered. The issue's own text gives two legal fixes and
+            forbids applying both — repair the field, or let the drain drop the nodes. The drain
+            dropped them, and no field was rewritten.
         plan:
-            - run: this documentation-only candy ships no install content
+            - run: this retired concept candy ships no install content and owns no entity — a no-op, not a claim
               command: "true"
               context:
                 - build
-            - check: the overflow internals skill and agent entities are present and generated into the marketplace's internals/skills and internals/agents trees
-              id: charly-internals-extra-present
+            - check: no-op — the candy owns no `skill:` or `agent` node any more, so there is no body to resolve and nothing this step could assert
+              id: charly-internals-extra-retired-no-op
               context:
                 - build
               command: "true"
-strict-policy-skill:
-    skill:
-        name: strict-policy
-        family: internals
-        owner: charly-internals
-        triggers:
-            - "Agent Driven Evaluation (ADE) / `charly box feature run` / `charly check feature run` / `charly feature list/pending/validate` / authoring a candy's `plan:` + `description:` string / the agent grader for `agent-check:` steps"
-            - "Engineering-discipline triggers (failure surfaced / dup pattern / ad-hoc fix tempting / \"out of scope\" framing)"
-            - "Go code-quality / AGENTS.md-compliance audit / `golangci-lint` / `dupl` / duplication or dead-code check / `.golangci.yml`"
-vm-spec-skill:
-    skill:
-        name: vm-spec
-        family: internals
-        owner: charly-internals
-        triggers:
-            - "VmSpec / libvirt / cloud-init / OVMF internals"
-check-bed-runner-agent:
-    skill:
-        name: check-bed-runner
-        family: internals
-        owner: charly-internals
-        type: agent
-        model: inherit
-deploy-verifier-agent:
-    skill:
-        name: deploy-verifier
-        family: internals
-        owner: charly-internals
-        type: agent
-        model: inherit
-layer-validator-agent:
-    skill:
-        name: layer-validator
-        family: internals
-        owner: charly-internals
-        type: agent
-        model: inherit
-pr-validator-agent:
-    skill:
-        name: pr-validator
-        family: internals
-        owner: charly-internals
-        type: agent
-        model: inherit
-root-cause-analyzer-agent:
-    skill:
-        name: root-cause-analyzer
-        family: internals
-        owner: charly-internals
-        type: agent
-        model: inherit
-        triggers:
-            - "Unexpected failure / error / anomaly"
-testing-validator-agent:
-    skill:
-        name: testing-validator
-        family: internals
-        owner: charly-internals
-        type: agent
-        model: inherit
